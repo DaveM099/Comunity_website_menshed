@@ -1,0 +1,17 @@
+{
+  "name": "sass",
+  "version": "1.0.0",
+  "description": "sass starter",
+  "main": "sass",
+  "scripts": {
+    "sass:build:": "sass scss:css"
+  },
+  "keywords": [
+    "sass"
+  ],
+  "author": "dave",
+  "license": "ISC",
+  "dependencies": {
+    "sass": "^1.71.1"
+  }
+}
