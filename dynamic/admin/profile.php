@@ -63,10 +63,15 @@ if(isset($_SESSION['author_role'])){
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
     <link rel="icon" href="../Shed_img/Shed02.png" />
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+
+       <!--https://www.bootstrapcdn.com/ -->
+         <!--cdn.jsdelivr.net-->
+		 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		 <script src="https://cdnjs/cloudflare.com/ajax/libs/jqBootstrapValidation/1.3.6/jqBootstrapValidation.js"></script>
 
     	<!--Alert style-->
 		<style>
@@ -112,7 +117,7 @@ if(isset($_SESSION['author_role'])){
                         <h6>
                         You are logged in as <?php echo $_SESSION['author_role']; ?>    
                         </h6>
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist" >
                             <li class="nav-item">
                                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                     aria-controls="home" aria-selected="true">About</a>
@@ -154,7 +159,19 @@ if(isset($_SESSION['author_role'])){
                                     <label>Password</label>
                                 </div>
                                 <div class="col-md-6">
-                                <input name="author_password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"><br>
+                                <input name="author_password" id="myInput" type="password" class="form-control"  placeholder="Password">
+                                <input class="mb-4 mt-2" type="checkbox" onclick="showPass()"> Show Password <br>
+
+                                <script>
+                                function showPass() {
+                                    var x = document.getElementById("myInput");
+                                    if (x.type === "password") {
+                                        x.type = "text";
+                                    } else {
+                                        x.type = "password";
+                                    }
+                                        }
+                                </script>
                                 </div>
                             </div>
                             <div class="row">

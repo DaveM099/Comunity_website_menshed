@@ -4,6 +4,15 @@ include_once "../includes/connection.php";
 
 $message = ''; // Initialize message variable
 
+// Check if invite code is present in URL
+if(isset($_GET['invite'])){
+    $inviteCode = mysqli_real_escape_string($conn, $_GET['invite']);
+} else {
+    // Redirect the user with an error message if the invite code is missing
+    header("Location: signup.php?message=Invalid+or+Missing+Invite+Code");
+    exit();
+}
+
 if(isset($_POST['signup'])){
 				
 	$author_name = mysqli_real_escape_string($conn, $_POST['author_name']);
@@ -21,6 +30,13 @@ if(isset($_POST['signup'])){
         header("Location: signup.php?message=Please+Enter+A+Valid+email");
         exit();
 	}else{
+         // check invite code
+		$query = "SELECT * FROM invitations WHERE inviteCode = '$inviteCode' AND email = '$author_email'";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) == 0){
+			header("Location: signup.php?message=Invalid+Code+or+email+already+exists");
+			exit();
+		}
 		//If email exists
 		$sql2 = "SELECT * FROM `author` WHERE `author_email`='$author_email'";
 		$result = mysqli_query($conn, $sql2);
@@ -102,8 +118,13 @@ if(isset($_GET['message'])){
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <div class="panel-title">Sign Up</div>
+                           
                             
-                        </div>  
+                        </div> 
+                        <div style="margin:10px;">
+                        <p >Welcome to Test Valley Men's shed.  Enter your details below to register</p>
+                        </div>
+                        
                         <div class="panel-body" >
                             <form method="post" id="signupform" class="form-signin form-horizontal" role="form">
                                 

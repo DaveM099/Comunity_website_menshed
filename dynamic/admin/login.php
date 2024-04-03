@@ -10,6 +10,7 @@ include_once "../includes/connection.php";
 			
 				$author_email = mysqli_real_escape_string($conn, $_POST['author_email']);
 				$author_password = mysqli_real_escape_string($conn, $_POST['author_password']);
+             
 				
 				//checking for empty fields
 				if(empty($author_email) OR empty($author_password)){
@@ -40,7 +41,8 @@ include_once "../includes/connection.php";
 								$_SESSION['author_email'] = $row['author_email'];
 								$_SESSION['author_bio'] = $row['author_bio'];
 								$_SESSION['author_role'] = $row['author_role'];
-								header("Location: posts.php");
+                               
+								header("Location: ../index.php?message=You+are+now+logged+in");
 								exit();
 							}
 						}
@@ -61,6 +63,9 @@ include_once "../includes/connection.php";
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
+   
+
+   
     <!--Alert style-->
     <style>
         .alert-message {
@@ -127,20 +132,12 @@ if(isset($_GET['message'])){
                                     
 
                                 
-                            <div class="input-group">
-                                      <div class="checkbox">
-                                        <label>
-                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-                                        </label>
-                                      </div>
-                                    </div>
-
+                         
 
                                 <div style="margin-top:10px" class="form-group">
                                     <!-- Button -->
 
                                     <div class="col-sm-12 controls">
-									<div style="margin-bottom:20px; font-size: 16px; font-weight:bold; color: black; "><a href="#">Forgot password? Recover here</a></div>
 									<button class="btn btn-success btn-block" name="signup" type="submit">Log  In</button>
                                       
 
@@ -152,8 +149,8 @@ if(isset($_GET['message'])){
                                     <div class="col-md-12 control">
                                         <div style="border-top: 1px solid#888; padding-top:20px; font-size:95%; font-weight:bold" >
                                             Don't have an account?
-                                        <a href="signup.php" >
-                                            Sign Up Here
+                                        <a href="../ShedContact.html" >
+                                            Contact us here and we'll send you an invite link to register.
                                         </a>
                                         </div>
                                     </div>

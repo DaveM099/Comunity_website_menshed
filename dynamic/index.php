@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+session_start();
 include_once "includes/connection.php";
 include_once "includes/functions.php";
 // Check if the user is logged in and if they are an admin
@@ -7,6 +7,12 @@ if(isset($_SESSION['author_role']) && $_SESSION['author_role'] == "admin") {
     $isAdmin = true;
 } else {
     $isAdmin = false;
+}
+// Check if the user is logged in and if they are an admin
+if(isset($_SESSION['author_role']) && $_SESSION['author_role'] == "member") {
+    $ismember = true;
+} else {
+    $ismember = false;
 }
 ?>
 <!DOCTYPE html>
@@ -43,11 +49,11 @@ if(isset($_SESSION['author_role']) && $_SESSION['author_role'] == "admin") {
             left: 0;
             width: 100%;
             height: 12px;
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             z-index: 9999;
             padding: 20px;
-            background-color: #d9edf7; 
+            background-color: #d9edf7;
             color: #0d2a4f;
             text-align: left;
         }
@@ -72,49 +78,87 @@ if(isset($_GET['message'])){
           </div>';
 }
 ?>
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="Shed.html"><img src="Shed_img/ShedLogo.png"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-            <span class="navbar-toggler-icon"></span>
+   <!-- Navigation-->
+   <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="Shed.html"
+          ><img src="Shed_img/ShedLogo.png" alt="Shed logo"
+        /></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a href="Shed.html" class="nav-link fw-semibold">Home</a>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="Shed.html" class="nav-link fw-semibold">Home</a>
+            </li>
+            <li class="nav-item">
+              <a href="menshed.html" class="nav-link fw-semibold">Men's shed</a>
+            </li>
+            <li class="nav-item">
+              <a href="index.php" class="nav-link fw-semibold">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a href="gallery.html" class="nav-link fw-semibold">Gallery</a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="ShedContact.html"
+                class="nav-link btn btn-outline-light fw-semibold px-4 mx-4"
+                >Contact</a
+              >
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Members
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="../dynamic/admin/posts.php"
+                    >Dashboard</a
+                  >
                 </li>
-                <li class="nav-item dropdown">
-                    <a href="menshed.html" class="nav-link fw-semibold">Men's shed</a>
+                <li>
+                  <a class="dropdown-item" href="../dynamic/admin/profile.php"
+                    >My Profile</a
+                  >
                 </li>
-                <li class="nav-item">
-                    <a href="index.php" class="nav-link fw-semibold">Projects</a>
+                <li>
+                  <a class="dropdown-item" href="../dynamic/chat/index.php"
+                    >Chat</a
+                  >
                 </li>
-                <li class="nav-item">
-                    <a href="gallery.html" class="nav-link fw-semibold">Gallery</a>
-                </li>
-                <li class="nav-item">
-                    <a href="ShedContact.html" class="nav-link btn btn-outline-light fw-semibold px-4 mx-4">Contact</a>
-                </li>
-            </ul>
-            <ul id="members" class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Members
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../dynamic/admin/posts.php">Dashboard</a></li>
-                        <li><a class="dropdown-item" href="../dynamic/admin/profile.php">My Profile</a></li>
-                        <li><a class="dropdown-item" href="../dynamic/admin/login.php">Login</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../dynamic/admin/logout.php">Sign out</a>
-                </li>
-            </ul>
+
+              </ul>
+            </li>
+            <?php if(isset($_SESSION['author_role'])): ?>
+        <!-- if user is signed in -->
+        <li class="nav-item">
+          <a class="nav-link" href="../dynamic/admin/logout.php">Log out</a>
+        </li>
+        <?php else: ?>
+        <!-- if user is not signed in -->
+        <li class="nav-item">
+          <a class="nav-link" href="../dynamic/admin/login.php">Sign in</a>
+        </li>
+        <?php endif; ?>
+          </ul>
         </div>
-    </div>
-</nav>
+      </div>
+    </nav>
 
     <!--End of Navigation-->
         <!--Start of Hero-->
@@ -128,35 +172,41 @@ if(isset($_GET['message'])){
            </div>
         </div>
       <!--End of Hero-->
-   
+
     <!-- Start of project section-->
     <div class="container mt-5">
-        <?php 
-        //pagination
-        $sqlpg = "SELECT * FROM `POST`";
-        $resultpg = mysqli_query($conn, $sqlpg);
-        $totalposts = mysqli_num_rows($resultpg); 
-        $totalpages = ceil($totalposts/6);
-    //pagination get
-    if(isset($_GET['p'])){
-        $pageid = $_GET['p'];
-        $start = ($pageid*6)-6;
-        $sql = "SELECT * FROM `post` ORDER BY post_id DESC LIMIT $start, 6";
-    }else{
-        $sql = "SELECT * FROM `post` ORDER BY post_id DESC LIMIT 0,6";
-    }
-     if($isAdmin): ?>
-            <div class="row justify-content-md-end"> 
-                <div class="col-md-2 mb-3"> 
-                    <a href="../dynamic/admin/newproject.php" class="profile-edit-btn d-block text-center" style="text-decoration:none; font-size:18px;" >Add Project</a>
-                </div>
-                <div class="col-md-2"> 
-                    <a href="../dynamic/admin/posts.php" class="profile-edit-btn d-block text-center"  style="text-decoration:none; font-size:18px;"  >Edit Projects</a>
-                </div>
-            </div>
-        <?php endif; ?>
+      <?php
+//pagination
+$sqlpg = "SELECT * FROM `POST`";
+$resultpg = mysqli_query($conn, $sqlpg);
+$totalposts = mysqli_num_rows($resultpg);
+$totalpages = ceil($totalposts/6);
 
-    
+//pagination get
+if(isset($_GET['p'])){
+  $pageid = $_GET['p'];
+  $start = ($pageid*6)-6;
+  $sql = "SELECT * FROM `post` ORDER BY post_id DESC LIMIT $start, 6";
+} else {
+  $sql = "SELECT * FROM `post` ORDER BY post_id DESC LIMIT 0,6";
+}
+?>
+
+<div class="row justify-content-md-end">
+  <?php if(isset($_SESSION['author_role'])): ?>
+      <div class="col-md-2 mb-3">
+          <a href="../dynamic/admin/newproject.php" class="profile-edit-btn d-block text-center" style="text-decoration:none; font-size:18px;">Add Project</a>
+      </div>
+  <?php endif; ?>
+  <?php if($isAdmin): ?>
+      <div class="col-md-2">
+          <a href="../dynamic/admin/posts.php" class="profile-edit-btn d-block text-center" style="text-decoration:none; font-size:18px;">Edit Projects</a>
+      </div>
+  <?php endif; ?>
+</div>
+</div>
+
+
 </div>
 
 
@@ -168,8 +218,8 @@ if(isset($_GET['message'])){
             </h2>
             <div class="container">
             <div class="card-columns">
-            <?php 
-                
+            <?php
+
                 $result = mysqli_query($conn, $sql);
                 while($row=mysqli_fetch_assoc($result)){
                     $post_title = $row['post_title'];
@@ -182,17 +232,17 @@ if(isset($_GET['message'])){
                 $resultauth = mysqli_query($conn, $sqlauth);
                 while($authrow=mysqli_fetch_assoc($resultauth)) {
                     $post_author_name = $authrow['author_name'];
-                
+
             ?>
-                <div class="card m-4" style="width: 18rem;">
-                    <img class="card-img-top" src="<?php echo $post_image ?>" alt="Card image cap" style="max-width:100%; max-height: 200px;"> 
-                    <div class="card-body d-flex flex-column"> 
+                <div class="card m-4" style="max-width: 18rem;">
+                    <img class="card-img-top" src="<?php echo $post_image ?>" alt="Card image cap" style="max-height: 200px;">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><?php echo $post_title ?></h5>
                         <p class="card-text flex-grow-1"><?php echo substr($post_content,0, 90)."...";?> </p>
                         <a href="post.php?id=<?php echo $post_id; ?>" class="btn btn-primary mt-2">View Project</a>
 
                     </div>
-                
+
                  </div>
 
                <?php }}?>
@@ -209,9 +259,9 @@ if(isset($_GET['message'])){
             <br><br>
     </section>
 
-    
-   
- 
+
+
+
 
 
 
@@ -221,86 +271,93 @@ if(isset($_GET['message'])){
 <!--start of footer-->
 <footer class="footer-bs">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <h5 class="my-4">
-                    Opening Times
-                </h5>
-                <table id="hours">
-                    <tbody>
+      <div class="row">
+        <!-- Opening Times Section -->
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <h5 class="mt-2">Opening Times</h5>
+          <table id="hours">
+            <tbody>
+              <tr>
+                <td>Tuesday</td>
+                <td>9:00</td>
+                <td>-</td>
+                <td>12:00</td>
+              </tr>
+              <tr>
+                <td>Thursday</td>
+                <td>9:00</td>
+                <td>-</td>
+                <td>12:00</td>
+              </tr>
+            </tbody>
+          </table>
 
-                        <tr>
-                            <td>
-                                Tuesday
-                            </td>
-                            <td>
-                                9:00
-                            </td>
-                            <td>
-                                -
-                            </td>
-                            <td>
-                                12:00
-                            </td>
-                        </tr>
+          <!-- Documents Section -->
 
-                        <tr>
-                            <td>
-                                Thursday
-                            </td>
-                            <td>
-                                9:00
-                            </td>
-                            <td>
-                                -
-                            </td>
-                            <td>
-                                12:00
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-
-                    <h5 class="h5 my-4">
-                        Where are we?
-                    </h5>
-
-                        <iframe style="border:0;"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.621588833226!2d-0.10138978208233192!3d51.50181131713625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604a7ad8695e7%3A0x77977f1c5c6ea419!2sMint%20Street%20Park!5e0!3m2!1sen!2suk!4v1661278379284!5m2!1sen!2suk"
-                            width="me-auto" height="450" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-
-
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-4">
-                <div class="row">
-                    <div class=" col-sm-6 col-md-6 col-lg-0 contact footer">
-                        <h5 class="my-4">
-                            Contact Details
-                        </h5>
-                        <p>
-                            <strong>Email: </strong><a
-                                href="mailto:Email@address.com"><strong>Email@Address.com</strong></a>
-                        </p>
-                        <p>
-                            <strong>Tel: 07634859845</strong>
-                        </p>
-                    </div>
-                </div>
-                <hr>
-                <div class=" col-sm-6 col-md-6 col-lg-12">
-                    <p>Copyright &copy; Test Valley Men's Shed 2024</p>
-                </div>
-
-                <a target="_blank" href="https://icons8.com/icon/R8YGrGsiFiTq/workshop">Workshop</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-            </div>
-
+          <h5 class="mt-2">Documents</h5>
+          <ul>
+            <li>
+              <a href="PDF%20Documents/openFlyerA4.pdf">OpenFlyerA4</a>
+            </li>
+            <li>
+              <a href="PDF%20Documents/CodeOfConductA4.pdf">CodeOfConduct</a>
+            </li>
+            <li>
+              <a href="PDF%20Documents/pavilionFloorplan.pdf.crdownload"
+                >PavilionFloorplan</a
+              >
+            </li>
+            <li>
+              <a href="PDF%20Documents/HealthAndSafetyA3.pdf"
+                >HealthAndSafetyA3</a
+              >
+            </li>
+          </ul>
         </div>
+
+        <!-- map Section -->
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <h5 class="mt-2" style="width: 300px">Where are we?</h5>
+          <div
+            class="map_space"
+            style="border: 0; width: 100%; height: 300px"
+          ></div>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 contact footer">
+              <h5 class="mt-2">Contact Details</h5>
+              <p>
+                <strong>Email: </strong
+                ><a href="mailto:mensshed@gmail.com"
+                  ><strong>testvalleymenshed@gmail.com</strong></a
+                >
+              </p>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <hr />
+              <!-- Add a horizontal line between sections -->
+              <p>Copyright &copy; Test Valley Men's Shed 2024</p>
+              <a
+                target="_blank"
+                href="https://icons8.com/icon/R8YGrGsiFiTq/workshop"
+                >Workshop</a
+              >
+               <a target="_blank" href="https://icons8.com" style="color: #ccc;"> icon by Icons8</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</footer>
+  </footer>
+
+
+    <script src='https://www.bing.com/api/maps/mapcontrol?&key=AmPfYOrhwsLeIqj_W6WCnE-YOdiziSgGqQSkSSsZPvFF5tpxXNy3lnl2wWNppFuv&callback=draw_map'></script>
+    <script src="../dynamic/js/map.js"></script>
+
+
 
 
 
